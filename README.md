@@ -1,131 +1,44 @@
-# Part 1: Creating an App using React and Apollo Graphql
+This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
-This is a three part tutorial series in which we will build a simple shopping cart app using React and [Apollo Graphql](https://www.apollographql.com/):
+## Available Scripts
 
-- Part 1: Retrieve and display data from a remote server.
-- Part 2: Use Apollo to manage the app's local state.
-- Part 3: Add unit tests.
+In the project directory, you can run:
 
-> Note: this tutorial assumes that you have a working knowledge of React and Typescript.
+### `yarn start`
 
-# Getting Started
+Runs the app in the development mode.<br />
+Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 
-To get started, create a new React App using the [CRA - Create React App](https://create-react-app.dev/) tool:
+The page will reload if you make edits.<br />
+You will also see any lint errors in the console.
 
-```bash
-yarn create react-app sw-shop-v1 --template typescript
-```
+### `yarn test`
 
-## Material UI
+Launches the test runner in the interactive watch mode.<br />
+See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
 
-To make our App prettier we will use the [Material UI](https://material-ui.com/):
+### `yarn build`
 
-```bash
-yarn add @material-ui/core
-```
+Builds the app for production to the `build` folder.<br />
+It correctly bundles React in production mode and optimizes the build for the best performance.
 
-## Apollo Graphql
+The build is minified and the filenames include the hashes.<br />
+Your app is ready to be deployed!
 
-Add the necessary packages from [Apollo](https://www.apollographql.com/):
+See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
 
-```bash
-yarn add @apollo/react-hooks graphql apollo-client apollo-cache-inmemory apollo-link-http apollo-link-error apollo-link graphql-tag
-```
+### `yarn eject`
 
-### Configuring the Apollo Client
+**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
 
-Now that we've added all the necessary Apollo package we have to initialize the Apollo Client. For this tutorial we are going to use the [Rick and Morty API](https://rickandmortyapi.com/graphql). Click on [this link](https://rickandmortyapi.com/graphql) to see the playground with the graphql schema and the available data.
+If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
 
-Create a folder called *config* to place the Apollo configuration file. Then create a new file called *
+Instead, it will copy all the configuration files and the transitive dependencies (Webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
 
-## Graphql Codegen
+You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
 
-The [Graphql Codegen](https://graphql-code-generator.com/) is a tool that automatically generates typescript types and classes based on your Grapqhql Schema. It is very useful to ensure type safety.
+## Learn More
 
-### Configuring the Grapqhl Codegen
+You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
 
-The Grapqhl Codegen comes with a CLI tool that helps you create a configuration file. To use it follow these steps:
-
-Install the CLI:
-
-```bash
-yarn add -D @graphql-codegen/cli
-
-```
-
-Execute the wizard:
-
-```bash
-yarn graphql-codegen init
-```
-
-Choose the following options:
-
-1. Application built with React.
-2. For this tutorial we will use the [Rick and Morty Graphql API](https://rickandmortyapi.com/graphql). Its endpoint is this one: https://rickandmortyapi.com/graphql.
-3. Use the default value (`src/**/*.graphql`) for the fragment and operations.
-4. Then pick the following plugins:
-    - TypeScript
-    - TypeScript Operations
-    - TypeScript React Apollo
-    - Introspection Fragment Matcher
-5. Use the default value for the output (`src/generated/graphql.tsx`).
-6. Answer *no* when it asks if you want to generate an instrospection file.
-7. Use the default value for the name of the config file (`codegen.yml`).
-8. Type in `gen-graphql` when it asks the name of the script in the *package.json` that will be used to generate the graphql files.
-
-After the wizard finishes, run `yarn install` to install all the necessary plugins added by the Grapqhl Code Gen.
-
-Now, open your *codegen.yml* file and add the `config` param to tell the codegen that we want to use hooks. The final file looks like the one below:
-
-```yml
-overwrite: true
-schema: "https://rickandmortyapi.com/graphql"
-documents: "src/**/*.graphql"
-generates:
-  src/generated/graphql.tsx:
-    plugins:
-      - "typescript"
-      - "typescript-operations"
-      - "typescript-react-apollo"
-      - "fragment-matcher"
-
-    # Add this to use hooks:
-    config:
-      withHooks: true
-```
-
-# Creating Our First Query
-
-Now that we have added all necessary packages, let's create our first graphql query to retrieve all characters from the Rick and Morty API. To do this, create a folder called *graphql* inside our *src* folder. Here we will add all of our *.graphql* files. Next, create a new file called: *get-all-characters.query.graphql* and paste the contents below:
-
-```graphql
-query GetCharacters {
-  characters {
-    results {
-      id
-      __typename
-      name
-      species
-      origin {
-        id
-        __typename
-        name
-      }
-      location {
-        id
-        __typename
-        name
-      }
-    }
-  }
-}
-```
-
-Now run the Graphql Codegen to generate the typescript types:
-
-```bash
-yarn gen-graphql
-```
-
-If the command ran successfully, you should see that a *graphql.tsx* file was created inside our *generated* folder and that it contains our query.
+To learn React, check out the [React documentation](https://reactjs.org/).
