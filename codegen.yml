@@ -1,5 +1,5 @@
 overwrite: true
-schema: "https://graphql.org/swapi-graphql/"
+schema: "https://rickandmortyapi.com/graphql"
 documents: "src/**/*.graphql"
 generates:
   src/generated/graphql.tsx:
@@ -8,3 +8,7 @@ generates:
       - "typescript-operations"
       - "typescript-react-apollo"
       - "fragment-matcher"
+
+    # Add this to use hooks:
+    config:
+      withHooks: true
