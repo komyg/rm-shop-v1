@@ -38,7 +38,48 @@ Now that we've added all the necessary Apollo package we have to initialize the 
 
 Create a folder called *config* to place the Apollo configuration file. It will contain all our configs for the Apollo Client.
 
->Note: I've chosen to separate each configuration in its own file. I believe this makes it easier to read each of them, but you could use a single file as the documentation suggest. Also, I did not chose to use the Apollo Boost.
+>Note: I've chosen to separate each configuration in its own file. I believe this makes it easier to read each of them, but you could use a single file as the documentation suggest. Also, I did not choose to use the Apollo Boost.
+
+#### Configuring Apollo HTTP Link
+
+The Apollo HTTP link handles the connection between the client app and the Graphql server. Let's create a new config file called: apollo-http-link.ts and add the contents below:
+
+```typescript
+import { HttpLink } from 'apollo-link-http';
+
+export const httpLink = new HttpLink({
+  uri: 'https://rickandmortyapi.com/graphql',
+});
+```
+
+The `uri` param is the endpoint that contains the graphql API that we are using.
+
+#### Confifuring the Apollo Error Link
+
+The Apollo Error Link receives and logs any erros that may occurr in the Graphql calls. Create a new config file named: *apollo-error-link.ts* and paste the contents below:
+
+```typescript
+import { onError } from 'apollo-link-error';
+
+export const errorLink = onError(({ graphQLErrors, networkError, response, operation }) => {
+  if (graphQLErrors) {
+    for (const error of graphQLErrors) {
+      console.error(
+        `[GraphQL error]: Message: ${error.message}, Location: ${error.locations}, Path: ${error.path}`,
+        operation,
+        response
+      );
+    }
+  }
+  if (networkError) {
+    console.error(`[Network error]: ${networkError}`, operation, response);
+  }
+});
+```
+
+Notice that the errors here are split into two kinds: **Grapqhl Errors** and **Network Error**.
+
+If you have any error reporting tool, like [Sentry](https://sentry.io/), this is a good place to add them.
 
 ## Graphql Codegen
 
