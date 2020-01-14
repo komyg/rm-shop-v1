@@ -28,7 +28,8 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "gen-graphql": "graphql-codegen --config codegen.yml"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -46,8 +47,13 @@
     ]
   },
   "devDependencies": {
+    "@graphql-codegen/cli": "^1.11.2",
     "eslint-config-prettier": "^6.9.0",
     "eslint-plugin-prettier": "^3.1.2",
-    "prettier": "^1.19.1"
+    "prettier": "^1.19.1",
+    "@graphql-codegen/typescript": "1.11.2",
+    "@graphql-codegen/typescript-operations": "1.11.2",
+    "@graphql-codegen/typescript-react-apollo": "1.11.2",
+    "@graphql-codegen/fragment-matcher": "1.11.2"
   }
 }

@@ -1,0 +1,10 @@
+overwrite: true
+schema: "https://graphql.org/swapi-graphql/"
+documents: "src/**/*.graphql"
+generates:
+  src/generated/graphql.tsx:
+    plugins:
+      - "typescript"
+      - "typescript-operations"
+      - "typescript-react-apollo"
+      - "fragment-matcher"
