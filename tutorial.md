@@ -212,7 +212,7 @@ generates:
 
 # Creating Our First Query
 
-Now that we have added all necessary packages, let's create our first graphql query to retrieve all characters from the Rick and Morty API. To do this, create a folder called *graphql* inside our *src* folder. Here we will add all of our *.graphql* files. Next, create a new file called: *get-all-characters.query.graphql* and paste the contents below:
+Now that we have added all necessary packages, let's create our first graphql query to retrieve all characters from the Rick and Morty API. To do this, create a folder called *graphql* inside our *src* folder. Here we will add all of our *.graphql* files. Next, create a new file called: *get-characters.query.graphql* and paste the contents below:
 
 ```graphql
 query GetCharacters {
@@ -237,6 +237,8 @@ query GetCharacters {
 }
 ```
 
+>Note: I have added the `id` and `__typename` parameters to our query, even though they are not necessary at this point in our tutorial. I did this, because we will use the `id` field later and because the Apollo Dev Tools needs to have both parameters to show what is in our cache.
+
 Now run the Graphql Codegen to generate the typescript types:
 
 ```bash
@@ -244,3 +246,8 @@ yarn gen-graphql
 ```
 
 If the command ran successfully, you should see that a *graphql.tsx* file was created inside our *generated* folder and that it contains our query.
+
+## Displaying the Query Data
+
+Now that we have our first query, we would like to display its data. To do this, create a new folder called *components* and another *character-table* inside it. Then create a new file called *character-table.tsx* and paste the contents below.
+
