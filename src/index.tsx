@@ -1,13 +1,13 @@
 import { ApolloProvider } from '@apollo/react-hooks';
 import React from 'react';
 import ReactDOM from 'react-dom';
-import App from './App';
+import CharacterTable from './components/character-table/character-table';
 import { apolloClient } from './config/apollo-client';
 import * as serviceWorker from './serviceWorker';
 
 ReactDOM.render(
   <ApolloProvider client={apolloClient}>
-    <App />
+    <CharacterTable />
   </ApolloProvider>,
   document.getElementById('root')
 );

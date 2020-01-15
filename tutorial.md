@@ -247,7 +247,13 @@ yarn gen-graphql
 
 If the command ran successfully, you should see that a *graphql.tsx* file was created inside our *generated* folder and that it contains our query.
 
-## Displaying the Query Data
+## Displaying the query data
 
-Now that we have our first query, we would like to display its data. To do this, create a new folder called *components* and another *character-table* inside it. Then create a new file called *character-table.tsx* and paste the contents below.
+Now that we have our first query, we would like to display its data. To do this, create a new folder called *src/components*.
+
+### Creating the character table
+
+Create a new folder: *src/components/character-table* and create the file: *character-table.tsx* inside it. This component will create the table element, its headers and execute a query to our backend to retrieve the character data, it will then pass this data to another component that is responsible for display the table rows.
+
+Add the following to the *character-table.tsx* file:
 
