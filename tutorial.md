@@ -29,10 +29,10 @@ yarn add @material-ui/core
 Add the necessary packages from [Apollo](https://www.apollographql.com/):
 
 ```bash
-yarn add @apollo/react-hooks graphql apollo-client apollo-cache-inmemory apollo-link-http apollo-link-error apollo-link graphql-tag
+yarn add graphql apollo-client apollo-cache-inmemory apollo-link-http apollo-link-error apollo-link graphql-tag  apollo-cache apollo-utilities @apollo/react-hoc @apollo/react-components @apollo/react-hooks
 ```
 
-### Configuring the Apollo Client
+### Creating the Apollo Client
 
 Now that we've added all the necessary Apollo package we have to initialize the Apollo Client. For this tutorial we are going to use the [Rick and Morty API](https://rickandmortyapi.com/graphql). Click on [this link](https://rickandmortyapi.com/graphql) to see the playground with the graphql schema and the available data.
 
@@ -54,9 +54,9 @@ export const httpLink = new HttpLink({
 
 The `uri` param is the endpoint that contains the graphql API that we are using.
 
-#### Confifuring the Apollo Error Link
+#### Configuring the Apollo Error Link
 
-The Apollo Error Link receives and logs any erros that may occurr in the Graphql calls. Create a new config file named: *apollo-error-link.ts* and paste the contents below:
+The Apollo Error Link receives and logs any errors that may occur in the Graphql calls. Create a new config file named: *apollo-error-link.ts* and paste the contents below:
 
 ```typescript
 import { onError } from 'apollo-link-error';
@@ -77,9 +77,81 @@ export const errorLink = onError(({ graphQLErrors, networkError, response, opera
 });
 ```
 
-Notice that the errors here are split into two kinds: **Grapqhl Errors** and **Network Error**.
+Notice that the errors here are split into two kinds: **Grapqhl Errors** and **Network Error**. The first kind concerns errors that occur in queries and mutations, such as constraint errors while saving data, incorrect data formats, etc. The second kind concerns errors that occur in the network and on the POST requests made by the Apollo, such as timeouts, any error code >= 400 such as unauthorized, forbidden, service unavailable, internal server error, etc.
 
 If you have any error reporting tool, like [Sentry](https://sentry.io/), this is a good place to add them.
+
+#### Configuring the Local Cache
+
+The `InMemoryCache` is a module that stores the results of the queries and mutations locally so that you don't have to go to the server twice to get the same results. It can also be used for the application state management as we will see in the next parts of this tutorial. For now, create a new file named *apollo-local-cache.ts* and paste these contents:
+
+```typescript
+import { InMemoryCache } from 'apollo-cache-inmemory';
+
+export const localCache = new InMemoryCache({
+  freezeResults: true,
+});
+```
+
+The current version of Apollo doesn't require that the cached data be immutable, but we can get a performance boost if we design our cache this way. The `freezeResults` parameter helps us make sure our data is immutable, by throwing an error if we try to change an existing object while running our app in development mode.
+
+#### Configuring the Apollo Client
+
+Now we will configure the Apollo Client itself and import the configurations we made above. To do this, first create a new file called: *apollo-client.ts* and then paste the contents below:
+
+```ts
+import { ApolloClient } from 'apollo-client';
+import { ApolloLink } from 'apollo-link';
+import { httpLink } from './apollo-http-link';
+import { errorLink } from './apollo-error-lnk';
+import { localCache } from './apollo-local-cache';
+
+export const apolloClient = new ApolloClient({
+  link: ApolloLink.from([errorLink, httpLink]),
+  connectToDevTools: process.env.NODE_ENV !== 'production',
+  cache: localCache,
+  assumeImmutableResults: true,
+});
+```
+
+Here we imported the configurations we made on the other files:
+
+- First we create the `ApolloClient` using its constructor and pass a configuration object to it.
+- The first parameter of the configuration is the `ApolloLink`. It works as a chain of link objects that will either:
+
+  - Receive the request, transform it and pass it forward.
+  - Receive the request and pass it forward as it is.
+  - Receive the request, execute it and return the result to the previous objects in the chain.
+
+  In our case, we have just two links: the `errorLink` and the `httpLink`. Notice that the order here is important, because we want the `errorLink` to capture any errors that are returned by the `httpLink`, so the `errorLink` must come before it.
+
+  You can have as many links as you want, for example: `link: ApolloLink.from([authLink, errorLink, timeoutLink, restLink, httpLink])`. In this example, the `authLink` must come first, because it adds an `Authentication` header that is used to make all the requests. Then comes the `errorLink` to capture and log all the errors thrown further down the chain. Then we have the `timeoutLink` that will return an error if the requests made down the chain take longer than a specified period of time. Then we have the `restLink` that is used to make rest calls and finally we have the `httpLink` that handles the Graphql requests.
+
+- The second parameter in the configuration is the `connectToDevTools`. It is active only on non production environments and it allows the [Apollo Dev Tools](https://github.com/apollographql/apollo-client-devtools) to work.
+- The third parameter is the `InMemoryCache`.
+- The last parameter is `assumeImmutableResults: true`, it tells the Apollo Client that we intend to make our cached data immutable for a performance gain. Please note that we have to enforce the immutability by ourselves, but the parameter `freezeResults` that we configured on the `InMemoryCache` will help us do this, by throwing an error if we try to change an immutable object while on development.
+
+### The Apollo Provider
+
+Now that we have successfully configured the Apollo Client, we have to add the `ApolloProvider` so that all of our components can access it. To do this, we will change our *index.tsx* file to:
+
+```tsx
+import { ApolloProvider } from '@apollo/react-hooks';
+import React from 'react';
+import ReactDOM from 'react-dom';
+import App from './App';
+import { apolloClient } from './config/apollo-client';
+import * as serviceWorker from './serviceWorker';
+
+ReactDOM.render(
+  <ApolloProvider client={apolloClient}>
+    <App />
+  </ApolloProvider>,
+  document.getElementById('root')
+);
+
+serviceWorker.unregister();
+```
 
 ## Graphql Codegen
 
