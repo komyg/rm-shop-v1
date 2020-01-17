@@ -19,9 +19,11 @@ export default function CharacterTable(props: Props): ReactElement {
   // Use hook to retrieve data from the backend
   const { data, loading, error } = useGetCharactersQuery();
 
+  // Query state management
   if (loading) {
     return <CircularProgress />;
   } else if (error) {
+    console.error(error);
     return (
       <Typography variant='h5'>
         Error retrieving data, please reload the page to try again.
@@ -33,6 +35,7 @@ export default function CharacterTable(props: Props): ReactElement {
     );
   }
 
+  // Display the data
   return (
     <TableContainer component={Paper}>
       <Table>

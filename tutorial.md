@@ -249,15 +249,173 @@ If the command ran successfully, you should see that a *graphql.tsx* file was cr
 
 ## Displaying the query data
 
-Now that we have our first query, we would like to display its data. To do this, create a new folder called *src/components*. It will contain all of our new components.
-
-### Create a new app component
-
-For this tutorial, we will create a new App component that will replace the current one. To start, please delete the *App.tsx*, *App.test.tsx* and *App.css* files. Then create a new folder: *components/app* and create a new *app.tsx* file inside it.
+Now that we have our first query, we would like to display its data as a table. To do this, create a new folder called *src/components*. It will contain all of our new components.
 
 ### Creating the character table
 
-Create a new folder: *src/components/character-table* and create the file: *character-table.tsx* inside it. This component will create the table element, its headers and execute a query to our backend to retrieve the character data, it will then pass this data to another component that is responsible for display the table rows.
+Create a new folder: *src/components/character-table* and create the file: *character-table.tsx* inside it. This component will execute our query and display its data inside a table.
 
-Add the following to the *character-table.tsx* file:
+Copy and paste the code below into the *character-table.tsx* file:
 
+```tsx
+import {
+  CircularProgress,
+  Paper,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Typography,
+} from '@material-ui/core';
+import React, { ReactElement } from 'react';
+import { useGetCharactersQuery } from '../../generated/graphql';
+import CharacterData from '../character-data/character-data';
+
+interface Props {}
+
+export default function CharacterTable(props: Props): ReactElement {
+  // Use hook to retrieve data from the backend
+  const { data, loading, error } = useGetCharactersQuery();
+
+  // Query state management
+  if (loading) {
+    return <CircularProgress />;
+  } else if (error) {
+    console.error(error);
+    return (
+      <Typography variant='h5'>
+        Error retrieving data, please reload the page to try again.
+      </Typography>
+    );
+  } else if (!data || !data.characters || !data.characters.results) {
+    return (
+      <Typography variant='h5'>No data available, please reload the page to try again.</Typography>
+    );
+  }
+
+  // Display the data
+  return (
+    <TableContainer component={Paper}>
+      <Table>
+        <TableHead>
+          <TableRow>
+            <TableCell>Name</TableCell>
+            <TableCell>Species</TableCell>
+            <TableCell>Origin</TableCell>
+            <TableCell>Location</TableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {data.characters.results.map(character => (
+            <CharacterData character={character} key={character?.id!} />
+          ))}
+        </TableBody>
+      </Table>
+    </TableContainer>
+  );
+}
+```
+
+As you can see there are a lot of things happening in this file. First we use the `useGetCharactersQuery` hook. It executes our query as soon as the component finishes mounting (notice that we destructured its output using: `{ data, loading, error }`).
+
+Then we have a state management part in which we display different outputs depending on the query state. For example, we show a progress spinner when the query is retrieving data from the server and we show an error message if something goes wrong or if no data is available.
+
+Finally, if the query successfully retrieves the character data from the server, then we display it inside the `<Table>` element. Notice that we are mapping the array of characters that is returned by the query into a `<CharacterData />` component that we will create shortly.
+
+Also notice that we are passing a `key` attribute to the `<CharacterData />` component. This is a good practice to improve React's rendering speed.
+
+### Creating the character data
+
+Create a new folder: *src/components/character-data* and create the file: *character-data.tsx* inside it. This component will display our data as a table row.
+
+Copy and paste the code below into the *character-data.tsx* file:
+
+```tsx
+import React, { ReactElement } from 'react';
+import { Character, Maybe } from '../../generated/graphql';
+import { TableRow, TableCell } from '@material-ui/core';
+
+interface Props {
+  character: Maybe<Character | null>;
+}
+
+export default function CharacterData(props: Props): ReactElement {
+  return (
+    <TableRow>
+      <TableCell>{props.character?.name}</TableCell>
+      <TableCell>{props.character?.species}</TableCell>
+      <TableCell>{props.character?.origin?.name}</TableCell>
+      <TableCell>{props.character?.location?.name}</TableCell>
+    </TableRow>
+  );
+}
+```
+
+This component is pretty straight forward. But it is worth noticing that the data type that we are using on the `character` prop was generated by the Graphql Codegen. It indicates that the `character` might be null.
+
+Also we are using the new [Optional Chaining Operator](https://www.typescriptlang.org/docs/handbook/release-notes/typescript-3-7.html#optional-chaining) (`?.`) to simplify our code. What it does is return `undefined` if the `character` property is also `undefined` or `null` in the following statement: `props.character?.name` instead of throwing an error.
+
+### Create a new app component
+
+Finally let's create a new App component to display our data. To start, please delete the *App.tsx*, *App.test.tsx* and *App.css* files. Then create a new folder: *components/app* and create a new *app.tsx* file inside it.
+
+Copy and paste the following code:
+
+```tsx
+import React, { ReactElement } from 'react';
+import { Container, Box, Theme, makeStyles, createStyles } from '@material-ui/core';
+import CharacterTable from '../character-table/character-table';
+
+const useStyles = makeStyles((theme: Theme) =>
+  createStyles({
+    root: {
+      paddingTop: theme.spacing(2),
+      paddingBottom: theme.spacing(2),
+    },
+  })
+);
+
+export default function App(): ReactElement {
+  const classes = useStyles();
+
+  return (
+    <Container className={classes.root}>
+      <Box display='flex' justifyContent='center' alignContent='center'>
+        <CharacterTable />
+      </Box>
+    </Container>
+  );
+}
+```
+
+Notice that we are using the `createStyles` hook to avoid using css. (see: <https://material-ui.com/customization/components/#overriding-styles-with-classes)>).
+
+### Update the index.tsx file
+
+Now, update the *index.tsx* file to use our new `App` component:
+
+```tsx
+import { ApolloProvider } from '@apollo/react-hooks';
+import React from 'react';
+import ReactDOM from 'react-dom';
+import App from './components/app/app';
+import { apolloClient } from './config/apollo-client';
+import * as serviceWorker from './serviceWorker';
+
+ReactDOM.render(
+  <ApolloProvider client={apolloClient}>
+    <App />
+  </ApolloProvider>,
+  document.getElementById('root')
+);
+
+serviceWorker.unregister();
+```
+
+# Running our App
+
+Now we have everything we need to run our App. Open a console and type `yarn start` to run the development server and open a browser in this address: <http://localhost:3000>.
+
+If all goes well, you should see our table with the characters from Rick and Morty.

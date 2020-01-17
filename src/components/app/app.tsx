@@ -2,7 +2,6 @@ import React, { ReactElement } from 'react';
 import { Container, Box, Theme, makeStyles, createStyles } from '@material-ui/core';
 import CharacterTable from '../character-table/character-table';
 
-// Create hook to add additional styles (see: https://material-ui.com/customization/components/#overriding-styles-with-classes)
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
