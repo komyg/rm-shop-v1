@@ -249,7 +249,11 @@ If the command ran successfully, you should see that a *graphql.tsx* file was cr
 
 ## Displaying the query data
 
-Now that we have our first query, we would like to display its data. To do this, create a new folder called *src/components*.
+Now that we have our first query, we would like to display its data. To do this, create a new folder called *src/components*. It will contain all of our new components.
+
+### Create a new app component
+
+For this tutorial, we will create a new App component that will replace the current one. To start, please delete the *App.tsx*, *App.test.tsx* and *App.css* files. Then create a new folder: *components/app* and create a new *app.tsx* file inside it.
 
 ### Creating the character table
 
