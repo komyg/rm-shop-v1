@@ -13,7 +13,7 @@ This is a three part tutorial series in which we will build a simple shopping ca
 To get started, create a new React App using the [CRA - Create React App](https://create-react-app.dev/) tool:
 
 ```bash
-yarn create react-app sw-shop-v1 --template typescript
+yarn create react-app rm-shop-v1 --template typescript
 ```
 
 ## Material UI
@@ -32,9 +32,11 @@ Add the necessary packages from [Apollo](https://www.apollographql.com/):
 yarn add graphql apollo-client apollo-cache-inmemory apollo-link-http apollo-link-error apollo-link graphql-tag  apollo-cache apollo-utilities @apollo/react-hoc @apollo/react-components @apollo/react-hooks
 ```
 
+>Note: I chose not to use the Apollo Boost for this tutorial.
+
 ### Creating the Apollo Client
 
-Now that we've added all the necessary Apollo package we have to initialize the Apollo Client. For this tutorial we are going to use the [Rick and Morty API](https://rickandmortyapi.com/graphql). Click on [this link](https://rickandmortyapi.com/graphql) to see the playground with the graphql schema and the available data.
+Now that we've added all the necessary Apollo packages we have to create and initialize the Apollo Client. For this tutorial we are going to connect it to the [Rick and Morty API](https://rickandmortyapi.com/graphql). Click on [this link](https://rickandmortyapi.com/graphql) to see the playground with the graphql schema and the available data.
 
 Create a folder called *config* to place the Apollo configuration file. It will contain all our configs for the Apollo Client.
 
