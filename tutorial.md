@@ -392,7 +392,7 @@ export default function App(): ReactElement {
 }
 ```
 
-Notice that we are using the `createStyles` hook to avoid using css. (see: <https://material-ui.com/customization/components/#overriding-styles-with-classes)>).
+Notice that we are using the `createStyles` hook to avoid using css. (see: <https://material-ui.com/customization/components/#overriding-styles-with-classes>).
 
 ### Update the index.tsx file
 
