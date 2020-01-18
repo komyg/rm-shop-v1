@@ -38,7 +38,7 @@ yarn add graphql apollo-client apollo-cache-inmemory apollo-link-http apollo-lin
 
 Now that we've added all the necessary Apollo packages we have to create and initialize the Apollo Client. For this tutorial we are going to connect it to the [Rick and Morty API](https://rickandmortyapi.com/graphql). Click on [this link](https://rickandmortyapi.com/graphql) to see the playground with the graphql schema and the available data.
 
-Create a folder called *config* to place the Apollo configuration file. It will contain all our configs for the Apollo Client.
+Create a folder called *config* to place the configuration files for our Apollo Client.
 
 >Note: I've chosen to separate each configuration in its own file. I believe this makes it easier to read each of them, but you could use a single file as the documentation suggest. Also, I did not choose to use the Apollo Boost.
 
