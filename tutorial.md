@@ -40,7 +40,7 @@ Now that we've added all the necessary Apollo packages we have to create and ini
 
 Create a folder called *config* to place the configuration files for our Apollo Client.
 
->Note: I've chosen to separate each configuration in its own file. I believe this makes it easier to read each of them, but you could use a single file as the documentation suggest. Also, I did not choose to use the Apollo Boost.
+>Note: I've chosen to separate each configuration in its own file, because I believe it makes them more readable and clean, however you could use a single file as the documentation suggest. Also, I did not choose to use the Apollo Boost.
 
 #### Configuring Apollo HTTP Link
 
