@@ -40,7 +40,7 @@ Now that we've added all the necessary Apollo packages we have to create and ini
 
 Create a folder called *config* to place the configuration files for our Apollo Client.
 
->Note: I've chosen to separate each configuration in its own file, because I believe it makes them more readable and clean, however you could use a single file as the Apollo documentation suggest. Also, I did not choose to use the Apollo Boost.
+>Note: I've chosen to separate each configuration in its own file, because I believe it makes them more readable and clean, however you could use a single file as the Apollo documentation suggests.
 
 #### Configuring Apollo HTTP Link
 
@@ -79,9 +79,9 @@ export const errorLink = onError(({ graphQLErrors, networkError, response, opera
 });
 ```
 
-Notice that the errors here are split into two kinds: **Grapqhl Errors** and **Network Error**. The first kind concerns errors that occur in queries and mutations, such as constraint errors while saving data, incorrect data formats, etc. The second kind concerns errors that occur in the network and on the POST requests made by the Apollo, such as timeouts, any error code >= 400 such as unauthorized, forbidden, service unavailable, internal server error, etc.
+Notice that the errors here are split into two kinds: **Grapqhl Errors** and **Network Error**. The first kind concerns errors that occur in queries and mutations, such as constraint errors while saving data, incorrect data formats, etc. The second kind concerns errors that occur in the network and on the POST requests made by the Apollo, such as timeouts or any error code >= 400.
 
-If you have any error reporting tool, like [Sentry](https://sentry.io/), this is a good place to add them.
+If you have an error reporting tool like [Sentry](https://sentry.io/), this is a good place to add them.
 
 #### Configuring the Local Cache
 
@@ -105,7 +105,7 @@ Now we will configure the Apollo Client itself and import the configurations we 
 import { ApolloClient } from 'apollo-client';
 import { ApolloLink } from 'apollo-link';
 import { httpLink } from './apollo-http-link';
-import { errorLink } from './apollo-error-lnk';
+import { errorLink } from './apollo-error-link';
 import { localCache } from './apollo-local-cache';
 
 export const apolloClient = new ApolloClient({
@@ -116,18 +116,18 @@ export const apolloClient = new ApolloClient({
 });
 ```
 
-Here we imported the configurations we made on the other files:
+There is a lot going on this file:
 
-- First we create the `ApolloClient` using its constructor and pass a configuration object to it.
-- The first parameter of the configuration is the `ApolloLink`. It works as a chain of link objects that will either:
+- First we created the `ApolloClient` using its constructor and passed a configuration object to it.
+- The first parameter of the configuration is the `ApolloLink`. It works as a chain of [Apollo Link Objects](https://www.apollographql.com/docs/link/) that will either:
 
   - Receive the request, transform it and pass it forward.
   - Receive the request and pass it forward as it is.
-  - Receive the request, execute it and return the result to the previous objects in the chain.
+  - Receive the request, execute it and return the result to the previous object in the chain.
 
   In our case, we have just two links: the `errorLink` and the `httpLink`. Notice that the order here is important, because we want the `errorLink` to capture any errors that are returned by the `httpLink`, so the `errorLink` must come before it.
 
-  You can have as many links as you want, for example: `link: ApolloLink.from([authLink, errorLink, timeoutLink, restLink, httpLink])`. In this example, the `authLink` must come first, because it adds an `Authentication` header that is used to make all the requests. Then comes the `errorLink` to capture and log all the errors thrown further down the chain. Then we have the `timeoutLink` that will return an error if the requests made down the chain take longer than a specified period of time. Then we have the `restLink` that is used to make rest calls and finally we have the `httpLink` that handles the Graphql requests.
+  You can have as many links as you want, for example: `link: ApolloLink.from([authLink, errorLink, timeoutLink, restLink, httpLink])`. In this example, the `authLink` must come first, because it adds an `Authorization` header that is used to authenticate all requests. Then comes the `errorLink` to capture and log all the errors thrown further down the chain. Then we have the `timeoutLink` that will return an error if the requests made down the chain take longer than a specified period of time. Then we have the `restLink` that is used to make rest calls and finally we have the `httpLink` that handles the Graphql requests.
 
 - The second parameter in the configuration is the `connectToDevTools`. It is active only on non production environments and it allows the [Apollo Dev Tools](https://github.com/apollographql/apollo-client-devtools) to work.
 - The third parameter is the `InMemoryCache`.
