@@ -3,10 +3,12 @@
 This is a three part tutorial series in which we will build a simple shopping cart app using React and [Apollo Graphql](https://www.apollographql.com/):
 
 - Part 1: Retrieve and display data from a remote server.
-- Part 2: Use Apollo to manage the app's local state.
-- Part 3: Add unit tests.
+- Part 2: Use Apollo to manage the app's local state (coming soon).
+- Part 3: Add unit tests (coming soon).
 
 > Note: this tutorial assumes that you have a working knowledge of React and Typescript.
+
+You can find the complete code in this [repository](https://github.com/komyg/rm-shop-v1).
 
 # Getting Started
 
@@ -189,7 +191,7 @@ Choose the following options:
 5. Use the default value for the output (`src/generated/graphql.tsx`).
 6. Answer *no* when it asks if you want to generate an instrospection file.
 7. Use the default value for the name of the config file (`codegen.yml`).
-8. Type in `gen-graphql` when it asks the name of the script in the *package.json` that will be used to generate the graphql files.
+8. Type in `gen-graphql` when it asks the name of the script in the *package.json* that will be used to generate the graphql files.
 
 After the wizard finishes, run `yarn install` to install all the necessary plugins added by the Grapqhl Code Gen.
 
@@ -237,6 +239,7 @@ query GetCharacters {
     }
   }
 }
+
 ```
 
 >Note: I have added the `id` and `__typename` parameters to our query, even though they are not necessary at this point in our tutorial. I did this, because we will use the `id` field later and because the Apollo Dev Tools needs to have both parameters to show what is in our cache.
