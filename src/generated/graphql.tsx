@@ -16,7 +16,6 @@ export type Scalars = {
   Upload: any,
 };
 
-
 export enum CacheControlScope {
   Public = 'PUBLIC',
   Private = 'PRIVATE'
@@ -152,10 +151,10 @@ export type GetCharactersQueryVariables = {};
 export type GetCharactersQuery = (
   { __typename?: 'Query' }
   & { characters: Maybe<(
-    { __typename?: 'Characters' }
+    { __typename: 'Characters' }
     & { results: Maybe<Array<Maybe<(
       { __typename: 'Character' }
-      & Pick<Character, 'id' | 'name' | 'species'>
+      & Pick<Character, 'id' | 'name' | 'image' | 'species'>
       & { origin: Maybe<(
         { __typename: 'Location' }
         & Pick<Location, 'id' | 'name'>
@@ -171,10 +170,12 @@ export type GetCharactersQuery = (
 export const GetCharactersDocument = gql`
     query GetCharacters {
   characters {
+    __typename
     results {
       id
       __typename
       name
+      image
       species
       origin {
         id

@@ -221,10 +221,12 @@ Now that we have added all necessary packages, let's create our first graphql qu
 ```graphql
 query GetCharacters {
   characters {
+    __typename
     results {
       id
       __typename
       name
+      image
       species
       origin {
         id
@@ -239,7 +241,6 @@ query GetCharacters {
     }
   }
 }
-
 ```
 
 >Note: I have added the `id` and `__typename` parameters to our query, even though they are not necessary at this point in our tutorial. I did this, because we will use the `id` field later and because the Apollo Dev Tools needs to have both parameters to show what is in our cache.
@@ -288,7 +289,6 @@ export default function CharacterTable(props: Props): ReactElement {
   if (loading) {
     return <CircularProgress />;
   } else if (error) {
-    console.error(error);
     return (
       <Typography variant='h5'>
         Error retrieving data, please reload the page to try again.
@@ -306,10 +306,18 @@ export default function CharacterTable(props: Props): ReactElement {
       <Table>
         <TableHead>
           <TableRow>
-            <TableCell>Name</TableCell>
-            <TableCell>Species</TableCell>
-            <TableCell>Origin</TableCell>
-            <TableCell>Location</TableCell>
+            <TableCell>
+              <strong>Name</strong>
+            </TableCell>
+            <TableCell>
+              <strong>Species</strong>
+            </TableCell>
+            <TableCell>
+              <strong>Origin</strong>
+            </TableCell>
+            <TableCell>
+              <strong>Location</strong>
+            </TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -323,13 +331,12 @@ export default function CharacterTable(props: Props): ReactElement {
 }
 ```
 
-As you can see there are a lot of things happening in this file. First we use the `useGetCharactersQuery` hook. It executes our query as soon as the component finishes mounting. We have also destructured its output using: `{ data, loading, error }`.
+As you can see there are a lot of things happening in this file:
 
-Then we have a state management code in which we display different outputs depending on the query state. For example, we show a progress spinner when the query is retrieving data from the server or we show an error message if something goes wrong or if no data is available.
-
-Finally, if the query successfully retrieves the character data from the server, then we display it inside the `<Table>` element. Notice that we are mapping the array of characters that is returned by the query into a `<CharacterData />` component that we will create shortly.
-
-Also notice that we are passing a `key` attribute to the `<CharacterData />` component. This is a good practice to improve React's rendering speed.
+- First we use the `useGetCharactersQuery` hook. It executes our query as soon as the component finishes mounting. We have also destructured its output using: `{ data, loading, error }`.
+- Then we have a state management code in which we display different outputs depending on the query state. For example, we show a progress spinner when the query is retrieving data from the server or we show an error message if something goes wrong or if no data is available.
+- Finally, if the query successfully retrieves the character data from the server, then we display it inside the `<Table>` element. Notice that we are mapping the array of characters that is returned by the query into a `<CharacterData />` component that we will create shortly.
+- Also notice that we are passing a `key` attribute to the `<CharacterData />` component. This is a good practice to improve React's rendering speed.
 
 ### Creating the character data
 
@@ -340,16 +347,50 @@ Copy and paste the code below into the *character-data.tsx* file:
 ```tsx
 import React, { ReactElement } from 'react';
 import { Character, Maybe } from '../../generated/graphql';
-import { TableRow, TableCell } from '@material-ui/core';
+import {
+  TableRow,
+  TableCell,
+  Box,
+  createStyles,
+  Theme,
+  makeStyles,
+  Typography,
+} from '@material-ui/core';
 
 interface Props {
   character: Maybe<Character | null>;
 }
 
+const useStyles = makeStyles((theme: Theme) =>
+  createStyles({
+    nameTableCell: {
+      display: 'flex',
+      alignItems: 'center',
+    },
+    characterImg: {
+      maxHeight: '3rem',
+      width: 'auto',
+      borderRadius: '50%',
+    },
+    characterName: {
+      paddingLeft: theme.spacing(2),
+    },
+  })
+);
+
 export default function CharacterData(props: Props): ReactElement {
+  const classes = useStyles();
+
   return (
     <TableRow>
-      <TableCell>{props.character?.name}</TableCell>
+      <TableCell className={classes.nameTableCell}>
+        <Box>
+          <img src={props.character?.image!} alt='' className={classes.characterImg} />
+        </Box>
+        <Typography variant='body2' className={classes.characterName}>
+          {props.character?.name}
+        </Typography>
+      </TableCell>
       <TableCell>{props.character?.species}</TableCell>
       <TableCell>{props.character?.origin?.name}</TableCell>
       <TableCell>{props.character?.location?.name}</TableCell>
@@ -360,7 +401,9 @@ export default function CharacterData(props: Props): ReactElement {
 
 This component is pretty straight forward. But it is worth noticing that the data type that we are using on the `character` prop was generated by the Graphql Codegen. It indicates that the `character` might be null.
 
-Also we are using the new [Optional Chaining Operator](https://www.typescriptlang.org/docs/handbook/release-notes/typescript-3-7.html#optional-chaining) (`?.`) to simplify our code. What it does is return `undefined` if the `character` property is also `undefined` or `null` instead of throwing an error.
+We are using the new [Optional Chaining Operator](https://www.typescriptlang.org/docs/handbook/release-notes/typescript-3-7.html#optional-chaining) (`?.`) to simplify our code. What it does is return `undefined` if the `character` property is also `undefined` or `null` instead of throwing an error.
+
+And we are also using the [Material UI styling tools](https://material-ui.com/styles/api/#createstyles-styles-styles) that rely on jss.
 
 ### Create a new app component
 

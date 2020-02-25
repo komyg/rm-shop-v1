@@ -1,9 +1,11 @@
 query GetCharacters {
   characters {
+    __typename
     results {
       id
       __typename
       name
+      image
       species
       origin {
         id
