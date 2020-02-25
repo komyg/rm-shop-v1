@@ -6,6 +6,8 @@ This is a three part tutorial series in which we will build a simple shopping ca
 - [Part 2: Use Apollo to manage the app's local state.](https://dev.to/komyg/use-apollo-to-manage-the-app-s-local-state-167f)
 - Part 3: Add unit tests (coming soon).
 
+In this first part we will build a table that will show the available action figures, using data from the [Rick and Morty API](https://rickandmortyapi.com/).
+
 > Note: this tutorial assumes that you have a working knowledge of React and Typescript.
 
 You can find the complete code in this [repository](https://github.com/komyg/rm-shop-v1).
