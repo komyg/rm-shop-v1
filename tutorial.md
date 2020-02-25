@@ -2,9 +2,9 @@
 
 This is a three part tutorial series in which we will build a simple shopping cart app using React and [Apollo Graphql](https://www.apollographql.com/). The idea is to build a table in which the user can choose which Rick and Morty action figures he wants to buy.
 
-- [Part 1: Retrieve and display data from a remote server.](https://dev.to/komyg/creating-an-app-using-react-and-apollo-graphql-1ine)
+- [Part 1: Creating an App using React and Apollo Graphql.](https://dev.to/komyg/creating-an-app-using-react-and-apollo-graphql-1ine)
 - [Part 2: Use Apollo to manage the app's local state.](https://dev.to/komyg/use-apollo-to-manage-the-app-s-local-state-167f)
-- Part 3: Add unit tests (coming soon).
+- [Part 3: Unit Tests with Enzyme and Apollo Graphql](https://dev.to/komyg/unit-tests-with-enzyme-and-apollo-graphql-5e7p)
 
 In this first part we will build a table that will show the available action figures, using data from the [Rick and Morty API](https://rickandmortyapi.com/).
 
@@ -191,7 +191,7 @@ Choose the following options:
     - TypeScript React Apollo
     - Introspection Fragment Matcher
 5. Use the default value for the output (`src/generated/graphql.tsx`).
-6. Answer *no* when it asks if you want to generate an instrospection file.
+6. Answer *no* when it asks if you want to generate an introspection file.
 7. Use the default value for the name of the config file (`codegen.yml`).
 8. Type in `gen-graphql` when it asks the name of the script in the *package.json* that will be used to generate the graphql files.
 

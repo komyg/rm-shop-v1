@@ -2,9 +2,9 @@
 
 This project is the part one of a three part tutorial about creating a simple shopping cart application using React and Apollo Grapqhl. Links for the other parts are here:
 
-- [Part 1: Retrieve and display data from a remote server.](https://github.com/komyg/rm-shop-v1/blob/master/tutorial.md)
-- Part 2: Use Apollo to manage the app's local state.
-- Part 3: Add unit tests.
+- [Part 1: Creating an App using React and Apollo Graphql.](https://dev.to/komyg/creating-an-app-using-react-and-apollo-graphql-1ine)
+- [Part 2: Use Apollo to manage the app's local state.](https://dev.to/komyg/use-apollo-to-manage-the-app-s-local-state-167f)
+- [Part 3: Unit Tests with Enzyme and Apollo Graphql](https://dev.to/komyg/unit-tests-with-enzyme-and-apollo-graphql-5e7p)
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
