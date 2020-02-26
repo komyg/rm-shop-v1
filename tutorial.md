@@ -10,7 +10,7 @@ In this first part we will build a table that will show the available action fig
 
 > Note: this tutorial assumes that you have a working knowledge of React and Typescript.
 
-You can find the complete code in this [repository](https://github.com/komyg/rm-shop-v1).
+You can find the complete code in this [repository](https://github.com/komyg/rm-shop-v1) and the website here: https://komyg.github.io/rm-shop-v1/.
 
 # Getting Started
 
